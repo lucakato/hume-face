@@ -8,6 +8,7 @@ def index():
 
 @app.route('/upload', methods=['POST'])
 def upload():
+    print('post route')
     if 'image' in request.files:
         image = request.files['image']
         # Replace the following logic with your API call using the image file

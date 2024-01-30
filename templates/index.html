@@ -48,8 +48,10 @@
         <label for="image-input" class="custom-file-upload">
             Choose File
         </label>
-        <input type="file" id="image-input" name="image" accept="image/*" onchange="displayFileName()">
-        <input type="submit" value="Upload Image" style="display: none;">
+        <form action='/upload' method='post' enctype="multipart/form-data">
+            <input type="file" id="image-input" name="image" accept="image/*" onchange="displayFileName()">
+            <input type="submit" value="Upload Image" style="display: none;">
+        </form>
         <div id="file-info"></div>
     </div>
 
