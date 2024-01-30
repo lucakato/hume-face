@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 from werkzeug.utils import secure_filename
 from hume import HumeBatchClient
 from hume.models.config import FaceConfig
+from utilities import print_emotions
 from pprint import pprint
 
 # Load environment variables from .env
@@ -43,6 +44,16 @@ def handle_hume(file_path):
     job.await_complete()
     # Download predictions to a file
     print("Job completed with status: ", job.get_status())
+
+    full_predictions = job.get_predictions()
+    for source in full_predictions:
+        source_name = source["source"]["url"]
+        predictions = source["results"]["predictions"]
+        for prediction in predictions:
+            face_predictions = prediction["models"]["face"]["grouped_predictions"]
+            for face_prediction in face_predictions:
+                for frame in face_prediction["predictions"]:
+                    print_emotions(frame["emotions"])
 
 @app.route('/upload', methods=['POST'])
 def upload():
