@@ -1,5 +1,6 @@
 import os
 import secrets
+import requests
 from flask import Flask, render_template, flash, request, redirect, url_for, jsonify
 from dotenv import load_dotenv
 from werkzeug.utils import secure_filename
@@ -23,36 +24,47 @@ app.secret_key = secret_key
 def index():
     return render_template('index.html')
 
+
+def handle_hume(file_path):
+    # Initialize HumeBatchClient
+    client = HumeBatchClient(api_key)
+
+    upload_url = "https://file.io"
+    with open(file_path, "rb") as file:
+        response = requests.post(upload_url, files={"file": file})
+        uploaded_url = response.json()["link"]
+
+    # Configuration for face processing
+    config = FaceConfig()
+    # Submit job using the local file path
+    print(file_path)
+    job = client.submit_job([uploaded_url], [config])
+    # Wait for the job to complete
+    job.await_complete()
+    # Download predictions to a file
+    print("Job completed with status: ", job.get_status())
+
 @app.route('/upload', methods=['POST'])
 def upload():
     if request.method == 'POST':
-        print('in POST if block')
         # check if the post request has the file part
         if 'image' not in request.files:
             flash('No image part')
             return redirect(url_for('index'))
         image = request.files['image']
-        print('after getting image')
         # If the user does not select a file, the browser submits an
         # empty file without a filename.
         if image.filename == '':
             flash('No selected image')
             return redirect(url_for('index'))
         if image:
-            print('before secure image')
             imagename = secure_filename(image.filename)
-            print('before save')
-            image.save(os.path.join(app.config['UPLOAD_FOLDER'], imagename))
-            #return redirect(url_for('download_file', name=filename))
+            file_path = os.path.join(app.config['UPLOAD_FOLDER'], imagename)
+            image.save(file_path)
+            
             # call to Hume API
-            print('before hume call')
-            client = HumeBatchClient(api_key)
-            config = FaceConfig()
-            print('before job submit')
-            job = client.submit_job(image, [config])
-            predictions = job.get_predictions()
-            pprint(predictions)
-        
+            handle_hume(file_path)
+
         print('end')
         return 'end'
     else:
