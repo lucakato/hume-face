@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hume Image API</title>
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+
+        #upload-container {
+            text-align: center;
+        }
+
+        #upload-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .custom-file-upload {
+            display: inline-block;
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #4caf50;
+            color: #fff;
+            border-radius: 5px;
+        }
+
+        #file-info {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="upload-container">
+        <div id="upload-title">Upload a face picture to evaluate it!</div>
+        <label for="image-input" class="custom-file-upload">
+            Choose File
+        </label>
+        <input type="file" id="image-input" name="image" accept="image/*" onchange="displayFileName()">
+        <input type="submit" value="Upload Image" style="display: none;">
+        <div id="file-info"></div>
+    </div>
+
+    <script>
+        function displayFileName() {
+            const input = document.getElementById('image-input');
+            const fileInfo = document.getElementById('file-info');
+
+            if (input.files.length > 0) {
+                const fileName = input.files[0].name;
+                fileInfo.textContent = 'Uploaded: ' + fileName;
+            }
+        }
+    </script>
+</body>
+</html>
