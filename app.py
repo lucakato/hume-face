@@ -1,4 +1,6 @@
 from flask import Flask, render_template, request, jsonify
+from hume import HumeBatchClient
+from hume.models.config import FaceConfig
 
 app = Flask(__name__)
 
