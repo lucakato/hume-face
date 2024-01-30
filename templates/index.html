@@ -63,6 +63,11 @@
             if (input.files.length > 0) {
                 const fileName = input.files[0].name;
                 fileInfo.textContent = 'Uploaded: ' + fileName;
+                console.log('file selected:', fileName);
+
+                // trigger form submission
+                const form = document.querySelector('form');
+                form.submit();
             }
         }
     </script>
