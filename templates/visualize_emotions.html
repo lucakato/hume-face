@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualizing Your Emotions</title>
+</head>
+<body>
+    <h1>Visualizing Your Emotions</h1>
+    
+    <ul>
+        {% for key, value in emotion_scores.items() %}
+            <li>{{ key }}: {{ value }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

@@ -1,12 +1,12 @@
 import os
 import secrets
 import requests
-from flask import Flask, render_template, flash, request, redirect, url_for, jsonify
+from flask import Flask, session, render_template, flash, request, redirect, url_for, jsonify
 from dotenv import load_dotenv
 from werkzeug.utils import secure_filename
 from hume import HumeBatchClient
 from hume.models.config import FaceConfig
-from utilities import print_emotions
+from utilities import get_emotions
 from pprint import pprint
 
 # Load environment variables from .env
@@ -53,7 +53,15 @@ def handle_hume(file_path):
             face_predictions = prediction["models"]["face"]["grouped_predictions"]
             for face_prediction in face_predictions:
                 for frame in face_prediction["predictions"]:
-                    print_emotions(frame["emotions"])
+                    emotion_scores = get_emotions(frame["emotions"])
+    return emotion_scores
+
+
+@app.route('/visualize_emotions')
+def visualize_emotions():
+    emotion_scores = session.pop('ret_emotion_scores', None)
+    return render_template('visualize_emotions.html', emotion_scores=emotion_scores)
+
 
 @app.route('/upload', methods=['POST'])
 def upload():
@@ -74,12 +82,16 @@ def upload():
             image.save(file_path)
             
             # call to Hume API
-            handle_hume(file_path)
+            ret_emotion_scores = handle_hume(file_path)
+            
+            # Store the emotion scores in the session
+            session['ret_emotion_scores'] = ret_emotion_scores
 
-        print('end')
-        return 'end'
+        return redirect(url_for('visualize_emotions'))
     else:
         # If it's a GET request, redirect to the index route
         return redirect(url_for('index'))
+    
+
 if __name__ == '__main__':
     app.run(debug=True)
