@@ -8,5 +8,5 @@ def get_emotions(emotions: List[Dict[str, Any]]) -> None:
         res[emotion] += emotion_map[emotion]
         #print(f"- {emotion}: {emotion_map[emotion]:4f}")
     
-    #print(res)
-    return res
+    rounded_res = {key: round(value, 3) for key, value in res.items()}
+    return rounded_res

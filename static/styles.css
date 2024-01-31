@@ -1,0 +1,46 @@
+body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+}
+
+.emotion-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 50px;
+}
+
+.emotion-item {
+    text-align: center;
+}
+
+.emotion-name {
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+.emotion-circle {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    margin: 10px;
+}
+
+.anger {
+    background-color: #F10088;
+    color: #fff;
+}
+
+.sadness {
+    background-color: #43C2F8;
+    color: #fff;
+}
+
+.joy {
+    background-color: #F18800;
+    color: #fff;
+}

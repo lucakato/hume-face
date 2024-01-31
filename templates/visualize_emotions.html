@@ -3,15 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Visualizing Your Emotions</title>
+    <title>Visualizing Emotions</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
 </head>
-<body>
-    <h1>Visualizing Your Emotions</h1>
-    
-    <ul>
-        {% for key, value in emotion_scores.items() %}
-            <li>{{ key }}: {{ value }}</li>
-        {% endfor %}
-    </ul>
+<body style="background-color: #ECE490;">
+    <h1 style="text-align: center;">Visualizing Your Emotions</h1>
+    <div class="emotion-container">
+        <div class="emotion-item">
+            <div class="emotion-name anger">Anger</div>
+            <div class="emotion-circle anger">
+                {{ emotion_scores.Anger }}
+            </div>
+        </div>
+        <div class="emotion-item">
+            <div class="emotion-name sadness">Sadness</div>
+            <div class="emotion-circle sadness">
+                {{ emotion_scores.Sadness }}
+            </div>
+        </div>
+        <div class="emotion-item">
+            <div class="emotion-name joy">Joy</div>
+            <div class="emotion-circle joy">
+                {{ emotion_scores.Joy }}
+            </div>
+        </div>
+    </div>
 </body>
 </html>
