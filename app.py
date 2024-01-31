@@ -60,7 +60,8 @@ def handle_hume(file_path):
 @app.route('/visualize_emotions')
 def visualize_emotions():
     emotion_scores = session.pop('ret_emotion_scores', None)
-    return render_template('visualize_emotions.html', emotion_scores=emotion_scores)
+    image_path = session.get('image_path', None)
+    return render_template('visualize_emotions.html', emotion_scores=emotion_scores, image_path=image_path)
 
 
 @app.route('/upload', methods=['POST'])
@@ -84,8 +85,9 @@ def upload():
             # call to Hume API
             ret_emotion_scores = handle_hume(file_path)
             
-            # Store the emotion scores in the session
+            # Store the emotion scores and image in the session
             session['ret_emotion_scores'] = ret_emotion_scores
+            session['image_path'] = file_path
 
         return redirect(url_for('visualize_emotions'))
     else:
