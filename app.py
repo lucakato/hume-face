@@ -89,7 +89,7 @@ def upload():
             
             # call to Hume API
             ret_emotion_scores = handle_hume(file_path)
-            
+            print(ret_emotion_scores)
             # Store the emotion scores and image in the session
             session['ret_emotion_scores'] = ret_emotion_scores
             session['image_path'] = imagename

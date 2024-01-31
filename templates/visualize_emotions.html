@@ -13,21 +13,21 @@
 
     <div class="emotion-container">
         <div class="emotion-item">
-            <div class="emotion-name anger">Anger</div>
-            <div class="emotion-circle anger">
-                {{ emotion_scores.Anger }}
+            <div class="emotion-name first">{{ emotion_scores[0][0] }}</div>
+            <div class="emotion-circle first">
+                {{ emotion_scores[0][1] }}
             </div>
         </div>
         <div class="emotion-item">
-            <div class="emotion-name sadness">Sadness</div>
-            <div class="emotion-circle sadness">
-                {{ emotion_scores.Sadness }}
+            <div class="emotion-name second">{{ emotion_scores[1][0] }}</div>
+            <div class="emotion-circle second">
+                {{ emotion_scores[1][1] }}
             </div>
         </div>
         <div class="emotion-item">
-            <div class="emotion-name joy">Joy</div>
-            <div class="emotion-circle joy">
-                {{ emotion_scores.Joy }}
+            <div class="emotion-name third">{{ emotion_scores[2][0] }}</div>
+            <div class="emotion-circle third">
+                {{ emotion_scores[2][1] }}
             </div>
         </div>
     </div>

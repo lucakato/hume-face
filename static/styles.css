@@ -30,17 +30,17 @@ body {
     margin: 10px;
 }
 
-.anger {
+.first {
     background-color: #F10088;
     color: #fff;
 }
 
-.sadness {
+.second {
     background-color: #43C2F8;
     color: #fff;
 }
 
-.joy {
+.third {
     background-color: #F18800;
     color: #fff;
 }
