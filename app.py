@@ -28,39 +28,42 @@ def index():
 
 
 def handle_hume(file_path):
-    # Initialize HumeBatchClient
-    client = HumeBatchClient(api_key)
+    try:
+        # Initialize HumeBatchClient
+        client = HumeBatchClient(api_key)
 
-    upload_url = "https://file.io"
-    with open(file_path, "rb") as file:
-        response = requests.post(upload_url, files={"file": file})
-        uploaded_url = response.json()["link"]
+        upload_url = "https://file.io"
+        with open(file_path, "rb") as file:
+            response = requests.post(upload_url, files={"file": file})
+            uploaded_url = response.json()["link"]
 
-    # Configuration for face processing
-    config = FaceConfig()
-    # Submit job using the local file path
-    print(file_path)
-    start_time = time.time()
-    job = client.submit_job([uploaded_url], [config])
-    # Wait for the job to complete
-    job.await_complete()
-    # Download predictions to a file
-    print("Job completed with status: ", job.get_status())
+        # Configuration for face processing
+        config = FaceConfig()
+        # Submit job using the local file path
+        print(file_path)
+        start_time = time.time()
+        job = client.submit_job([uploaded_url], [config])
+        # Wait for the job to complete
+        job.await_complete()
+        # Download predictions to a file
+        print("Job completed with status: ", job.get_status())
+        emotion_scores = []
+        full_predictions = job.get_predictions()
+        for source in full_predictions:
+            predictions = source["results"]["predictions"]
+            for prediction in predictions:
+                face_predictions = prediction["models"]["face"]["grouped_predictions"]
+                for face_prediction in face_predictions:
+                    for frame in face_prediction["predictions"]:
+                        emotion_scores = get_emotions(frame["emotions"])
 
-    full_predictions = job.get_predictions()
-    for source in full_predictions:
-        source_name = source["source"]["url"]
-        predictions = source["results"]["predictions"]
-        for prediction in predictions:
-            face_predictions = prediction["models"]["face"]["grouped_predictions"]
-            for face_prediction in face_predictions:
-                for frame in face_prediction["predictions"]:
-                    emotion_scores = get_emotions(frame["emotions"])
-
-    total_time = str((time.time() - start_time))
-    print(total_time)
-    return emotion_scores
-
+        total_time = str((time.time() - start_time))
+        print(total_time)
+        return emotion_scores
+    except Exception as e:
+        # Log the exception or handle it accordingly
+        print(f"Exception in handle_hume: {e}")
+        return None
 
 @app.route('/visualize_emotions')
 def visualize_emotions():
