@@ -79,6 +79,7 @@ packaging==21.3
 pandas==2.0.3
 pandocfilters==1.5.0
 parso==0.8.3
+pbr==6.0.0
 pdbpp==0.10.3
 pexpect==4.6.0
 pickleshare==0.7.5
@@ -89,6 +90,7 @@ ptyprocess==0.7.0
 pure-eval==0.2.2
 pyasn1==0.4.2
 pyasn1-modules==0.2.1
+pycairo==1.25.1
 pycparser==2.21
 Pygments==2.10.0
 PyGObject==3.36.0
@@ -128,6 +130,7 @@ ssh-import-id==5.10
 stack-data==0.5.1
 systemd-python==234
 terminado==0.16.0
+testresources==2.0.1
 tinycss2==1.1.1
 tornado==6.2
 tqdm==4.64.1
