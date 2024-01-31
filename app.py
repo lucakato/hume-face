@@ -1,6 +1,7 @@
 import os
 import secrets
 import requests
+import time
 from flask import Flask, session, render_template, flash, request, redirect, url_for, jsonify
 from dotenv import load_dotenv
 from werkzeug.utils import secure_filename
@@ -16,7 +17,7 @@ secret_key = os.getenv("FLASK_SECRET_KEY")
 
 app = Flask(__name__)
 # specify upload folder
-app.config['UPLOAD_FOLDER'] = os.getcwd() + '/image_uploads/'
+app.config['UPLOAD_FOLDER'] = os.getcwd() + '/static/'
 app.config['SESSION_TYPE'] = 'filesystem'
 # # secret key for session management
 app.secret_key = secret_key
@@ -39,6 +40,7 @@ def handle_hume(file_path):
     config = FaceConfig()
     # Submit job using the local file path
     print(file_path)
+    start_time = time.time()
     job = client.submit_job([uploaded_url], [config])
     # Wait for the job to complete
     job.await_complete()
@@ -54,6 +56,9 @@ def handle_hume(file_path):
             for face_prediction in face_predictions:
                 for frame in face_prediction["predictions"]:
                     emotion_scores = get_emotions(frame["emotions"])
+
+    total_time = str((time.time() - start_time))
+    print(total_time)
     return emotion_scores
 
 
@@ -79,7 +84,7 @@ def upload():
             return redirect(url_for('index'))
         if image:
             imagename = secure_filename(image.filename)
-            file_path = os.path.join(app.config['UPLOAD_FOLDER'], imagename)
+            file_path = os.path.join(app.root_path, 'static', imagename)
             image.save(file_path)
             
             # call to Hume API
@@ -87,7 +92,7 @@ def upload():
             
             # Store the emotion scores and image in the session
             session['ret_emotion_scores'] = ret_emotion_scores
-            session['image_path'] = file_path
+            session['image_path'] = imagename
 
         return redirect(url_for('visualize_emotions'))
     else:
