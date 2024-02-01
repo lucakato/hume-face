@@ -5,13 +5,14 @@ body {
 
 .emotion-container {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     margin-top: 50px;
 }
 
 .emotion-item {
     text-align: center;
+    margin: 0 10px;
 }
 
 .emotion-name {
