@@ -17,7 +17,7 @@ def get_emotions(emotions: List[Dict[str, Any]]) -> None:
     emotion_map = {e["name"]: e["score"] for e in emotions}
     top_three_emotions = []
     max_heap = []
-
+    print('emotion map', emotion_map)
     for emotion, score in emotion_map.items():
         heapq.heappush(max_heap, (-round(score, 3), emotion))
     

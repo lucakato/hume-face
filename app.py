@@ -49,6 +49,7 @@ def handle_hume(file_path):
         print("Job completed with status: ", job.get_status())
         emotion_scores = []
         full_predictions = job.get_predictions()
+        print('full predictions', full_predictions)
         for source in full_predictions:
             predictions = source["results"]["predictions"]
             for prediction in predictions:
