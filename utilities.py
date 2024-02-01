@@ -1,5 +1,5 @@
+import heapq
 from typing import Any, Dict, List
-from collections import defaultdict
 
 all_emotions = [
     'Admiration', 'Adoration', 'Aesthetic Appreciation', 'Amusement', 'Anger',
@@ -18,12 +18,11 @@ def get_emotions(emotions: List[Dict[str, Any]]) -> None:
     top_three_emotions = []
     max_heap = []
 
-    for emotion in all_emotions:
-        max_heap.append((-round(emotion_map[emotion], 3), emotion))
-        #print(f"- {emotion}: {emotion_map[emotion]:4f}")
+    for emotion, score in emotion_map.items():
+        heapq.heappush(max_heap, (-round(score, 3), emotion))
     
     for _ in range(3):
-        score, emotion = max_heap.pop()
+        score, emotion = heapq.heappop(max_heap)
         top_three_emotions.append((emotion, -score))
     
     return top_three_emotions
