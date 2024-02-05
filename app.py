@@ -1,5 +1,5 @@
 import os
-import secrets
+import cloudconvert
 import requests
 import time
 from flask import Flask, session, render_template, flash, request, redirect, url_for, jsonify
@@ -13,6 +13,7 @@ from pprint import pprint
 # Load environment variables from .env
 load_dotenv()
 api_key = os.getenv("API_KEY")
+cc_api_key = os.getenv('CC_KEY')
 secret_key = os.getenv("FLASK_SECRET_KEY")
 
 app = Flask(__name__)
@@ -36,6 +37,45 @@ def handle_hume(file_path):
         with open(file_path, "rb") as file:
             response = requests.post(upload_url, files={"file": file})
             uploaded_url = response.json()["link"]
+
+        # Convert .heic or .heif to jpeg, start job
+        print('uploaded url', uploaded_url)
+        cloudconvert.configure(api_key=cc_api_key)
+
+        job = cloudconvert.Job.create(payload={
+            "tasks": {
+                'import-my-file': {
+                    'operation': 'import/url',
+                    'url': uploaded_url
+                },
+                'convert-my-file': {
+                    'operation': 'convert',
+                    'input': 'import-my-file',
+                    'output_format': 'jpg',
+                    'some_other_option': 'value'
+                },
+                'export-my-file': {
+                    'operation': 'export/url',
+                    'input': 'convert-my-file'
+                }
+            }
+        })
+        # wait for job completion
+        print('before wait')
+        job = cloudconvert.Job.wait(id=job['id'])
+        print('aftter wait')
+        export_task = None
+        # download output
+        for task in job["tasks"]:
+            if task.get("name") == "export-it" and task.get("status") == "finished":
+                export_task = task
+
+        print('after got file')
+        print('exported task', export_task)
+        file = export_task.get("result").get("files")[0]
+        cloudconvert.download(filename=file['filename'], url=file['url'])
+        print('converted', file)
+
 
         # Configuration for face processing
         config = FaceConfig()
@@ -92,6 +132,7 @@ def upload():
             image.save(file_path)
             
             # call to Hume API
+            print('file path', file_path)
             ret_emotion_scores = handle_hume(file_path)
             print(ret_emotion_scores)
             # Store the emotion scores and image in the session
