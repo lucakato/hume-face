@@ -69,25 +69,25 @@ def handle_hume(file_path):
                 export_task = task
 
         print('exported task', export_task)
-        file = export_task.get("result").get("files")[0]
-
-        converted_img_url = export_task['result']['files'][0]['url']
+        file = export_task['result']['files'][0]
+        res = cloudconvert.download(filename=file['filename'], url=file['url'])
 
         # Initialize HumeBatchClient
         client = HumeBatchClient(api_key)
         # Configuration for face processing
         config = FaceConfig()
         # Submit job using the local file path
-        print(file_path)
+ 
         start_time = time.time()
-        job = client.submit_job([converted_img_url], [config])
+        job = client.submit_job([res['url']], [config])
+
         # Wait for the job to complete
         job.await_complete()
         # Download predictions to a file
         print("Job completed with status: ", job.get_status())
         emotion_scores = []
         full_predictions = job.get_predictions()
-        print('full predictions', full_predictions)
+        # print('full predictions', full_predictions)
         for source in full_predictions:
             predictions = source["results"]["predictions"]
             for prediction in predictions:
