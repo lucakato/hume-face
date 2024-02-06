@@ -2,6 +2,7 @@ import os
 import cloudconvert
 import requests
 import time
+import json
 from flask import Flask, session, render_template, flash, request, redirect, url_for, jsonify
 from dotenv import load_dotenv
 from werkzeug.utils import secure_filename
@@ -30,16 +31,12 @@ def index():
 
 def handle_hume(file_path):
     try:
-        # Initialize HumeBatchClient
-        client = HumeBatchClient(api_key)
-
         upload_url = "https://file.io"
         with open(file_path, "rb") as file:
             response = requests.post(upload_url, files={"file": file})
             uploaded_url = response.json()["link"]
 
         # Convert .heic or .heif to jpeg, start job
-        print('uploaded url', uploaded_url)
         cloudconvert.configure(api_key=cc_api_key)
 
         job = cloudconvert.Job.create(payload={
@@ -51,7 +48,7 @@ def handle_hume(file_path):
                 'convert-my-file': {
                     'operation': 'convert',
                     'input': 'import-my-file',
-                    'output_format': 'jpg',
+                    'output_format': 'png',
                     'some_other_option': 'value'
                 },
                 'export-my-file': {
@@ -61,28 +58,29 @@ def handle_hume(file_path):
             }
         })
         # wait for job completion
-        print('before wait')
         job = cloudconvert.Job.wait(id=job['id'])
-        print('aftter wait')
+
         export_task = None
+
+        #print('job:', json.dumps(job, indent=4)) to test job output
         # download output
         for task in job["tasks"]:
-            if task.get("name") == "export-it" and task.get("status") == "finished":
+            if task.get("name") == "export-my-file" and task.get("status") == "finished":
                 export_task = task
 
-        print('after got file')
         print('exported task', export_task)
         file = export_task.get("result").get("files")[0]
-        cloudconvert.download(filename=file['filename'], url=file['url'])
-        print('converted', file)
 
+        converted_img_url = export_task['result']['files'][0]['url']
 
+        # Initialize HumeBatchClient
+        client = HumeBatchClient(api_key)
         # Configuration for face processing
         config = FaceConfig()
         # Submit job using the local file path
         print(file_path)
         start_time = time.time()
-        job = client.submit_job([uploaded_url], [config])
+        job = client.submit_job([converted_img_url], [config])
         # Wait for the job to complete
         job.await_complete()
         # Download predictions to a file
