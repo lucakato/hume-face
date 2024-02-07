@@ -37,6 +37,8 @@ def handle_hume(file_path):
             uploaded_url = response.json()["link"]
 
         # Convert .heic or .heif to jpeg, start job
+        # commented out for now, instead will enforce .png or .jpg submissions
+        '''
         cloudconvert.configure(api_key=cc_api_key)
 
         job = cloudconvert.Job.create(payload={
@@ -71,7 +73,7 @@ def handle_hume(file_path):
         print('exported task', export_task)
         file = export_task['result']['files'][0]
         image_to_submit = file['url']
-
+        '''
         # Initialize HumeBatchClient
         client = HumeBatchClient(api_key)
         # Configuration for face processing
@@ -80,7 +82,7 @@ def handle_hume(file_path):
  
         start_time = time.time()
 
-        job = client.submit_job([image_to_submit], [config])
+        job = client.submit_job([uploaded_url], [config])
         # Wait for the job to complete
         job.await_complete()
         # Download predictions to a file
