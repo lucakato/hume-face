@@ -70,7 +70,7 @@ def handle_hume(file_path):
 
         print('exported task', export_task)
         file = export_task['result']['files'][0]
-        res = cloudconvert.download(filename=file['filename'], url=file['url'])
+        image_to_submit = file['url']
 
         # Initialize HumeBatchClient
         client = HumeBatchClient(api_key)
@@ -79,8 +79,8 @@ def handle_hume(file_path):
         # Submit job using the local file path
  
         start_time = time.time()
-        job = client.submit_job([res['url']], [config])
 
+        job = client.submit_job([image_to_submit], [config])
         # Wait for the job to complete
         job.await_complete()
         # Download predictions to a file
