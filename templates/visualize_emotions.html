@@ -9,8 +9,12 @@
 <body style="background-color: #ECE490;">
     <h1 style="text-align: center;">Your Top 3 Emotions</h1>
 
-    <img src="{{ url_for('static', filename=image_path) }}" alt="Uploaded Image" style="display: block; margin: 0 auto; max-width: 100%; max-height: 300px;">
+    <img src="{{ url_for('static', filename=image_path) }}" alt="Uploaded Image" style="display: block; margin: 0 auto; max-width: 100%; max-height: 250px;">
 
+    <div class="try-again-button">
+        <a href="{{ url_for('index') }}"><button>Try Another Image!</button></a>
+    </div>
+    
     <div class="emotion-container">
         <div class="emotion-item">
             <div class="emotion-name first">{{ emotion_scores[0][0] }}</div>

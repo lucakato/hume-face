@@ -3,11 +3,27 @@ body {
     padding: 20px;
 }
 
+.try-again-button {
+    display: block;
+    text-align: center;
+    margin-top: 20px; /* Adjust spacing */
+}
+
+.try-again-button button {
+    font-size: 20px; /* Adjust font size */
+    color: #D8D6AB; /* Text color */
+    background-color: #6C470D; /* Background color */
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
 .emotion-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 50px;
+    margin-top: 30px;
 }
 
 .emotion-item {
