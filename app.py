@@ -3,6 +3,7 @@ import cloudconvert
 import requests
 import time
 import json
+from PIL import Image
 from flask import Flask, session, render_template, flash, request, redirect, url_for, jsonify
 from dotenv import load_dotenv
 from werkzeug.utils import secure_filename
