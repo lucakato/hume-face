@@ -4,35 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Visualizing Emotions</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+    </style>
 </head>
-<body style="background-color: #ECE490;">
-    <h1 style="text-align: center;">Your Top 3 Emotions</h1>
+<body class="bg-gradient-to-br from-purple-100 to-blue-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-4xl font-bold text-center text-purple-800 mb-8">Your Top 3 Emotions</h1>
 
-    <img src="{{ url_for('static', filename=image_path) }}" alt="Uploaded Image" style="display: block; margin: 0 auto; max-width: 100%; max-height: 250px;">
+        <div class="flex justify-center mb-8">
+            <img src="{{ url_for('static', filename=image_path) }}" alt="Uploaded Image" class="rounded-lg shadow-md max-w-full max-h-64">
+        </div>
 
-    <div class="try-again-button">
-        <a href="{{ url_for('index') }}"><button>Try Another Image!</button></a>
-    </div>
-    
-    <div class="emotion-container">
-        <div class="emotion-item">
-            <div class="emotion-name first">{{ emotion_scores[0][0] }}</div>
-            <div class="emotion-circle first">
-                {{ emotion_scores[0][1] }}
-            </div>
+        <div class="flex flex-wrap justify-center gap-8 mb-12">
+            {% set colors = ['bg-red-500', 'bg-blue-500', 'bg-green-500'] %}
+            {% set text_colors = ['text-red-700', 'text-blue-700', 'text-green-700'] %}
+            {% for emotion, score in emotion_scores[:3] %}
+                <div class="flex flex-col items-center">
+                    <div class="text-2xl font-semibold mb-2 {{ text_colors[loop.index0] }}">{{ emotion }}</div>
+                    <div class="w-24 h-24 rounded-full flex items-center justify-center text-white text-2xl font-bold {{ colors[loop.index0] }}">
+                        {{ "%.2f"|format(score) }}
+                    </div>
+                </div>
+            {% endfor %}
         </div>
-        <div class="emotion-item">
-            <div class="emotion-name second">{{ emotion_scores[1][0] }}</div>
-            <div class="emotion-circle second">
-                {{ emotion_scores[1][1] }}
-            </div>
-        </div>
-        <div class="emotion-item">
-            <div class="emotion-name third">{{ emotion_scores[2][0] }}</div>
-            <div class="emotion-circle third">
-                {{ emotion_scores[2][1] }}
-            </div>
+
+        <div class="text-center">
+            <a href="{{ url_for('index') }}" class="bg-purple-600 text-white py-2 px-6 rounded-lg hover:bg-purple-700 transition duration-300 inline-block">Try Another Image!</a>
         </div>
     </div>
 </body>

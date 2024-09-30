@@ -18,7 +18,7 @@ api_key = os.getenv("API_KEY")
 cc_api_key = os.getenv('CC_KEY')
 secret_key = os.getenv("FLASK_SECRET_KEY")
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='/static', static_folder='static')
 # specify upload folder
 app.config['UPLOAD_FOLDER'] = os.getcwd() + '/static/'
 app.config['SESSION_TYPE'] = 'filesystem'

@@ -3,75 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hume Image API</title>
+    <title>Emotion Analysis with Hume AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         body {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #eaf8be;
-        }
-
-        #upload-container {
-            text-align: center;
-            color: #380743;
-        }
-
-        #upload-title {
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
-
-        #upload-note, #hume-api-note, #source-code-note{
-            margin-top: -10px;
-            margin-bottom: 10px;
-        }
-
-        input[type="file"] {
-            display: none;
-        }
-
-        .custom-file-upload {
-            display: inline-block;
-            padding: 10px 20px;
-            cursor: pointer;
-            background-color: #4caf50;
-            color: #fff;
-            border-radius: 5px;
-        }
-
-        #file-info {
-            margin-top: 20px;
+            font-family: 'Poppins', sans-serif;
         }
     </style>
 </head>
-<body>
-    <div id="upload-container">
-        <div id="upload-title">Upload a face picture and analyze your emotions!</div>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <header class="text-center mb-12">
+            <h1 class="text-4xl font-bold text-purple-800 mb-2">Emotion Analysis with Hume AI</h1>
+            <p class="text-xl text-gray-600">Upload a face picture and analyze your emotions!</p>
+        </header>
 
-        <div id="upload-note">
-            Only clear, colored face pictures of a person will work! Images must be <b>.jpg or .png</b>
+        <div class="flex flex-col md:flex-row gap-8">
+            <!-- Upload Section -->
+            <div class="w-full md:w-1/2 bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-2xl font-semibold text-purple-800 mb-4">Upload Your Image</h2>
+                <p class="text-gray-600 mb-4">Only clear, colored face pictures of a person will work! Images must be <b>.jpg or .png</b></p>
+                <form action='/upload' method='post' enctype="multipart/form-data" class="mb-4">
+                    <label for="image-input" class="block w-full cursor-pointer bg-purple-600 text-white text-center py-2 px-4 rounded-lg hover:bg-purple-700 transition duration-300">
+                        Choose File
+                    </label>
+                    <input type="file" id="image-input" name="image" accept="image/*" class="hidden" onchange="displayFileName()">
+                    <input type="submit" value="Upload Image" class="hidden">
+                </form>
+                <div id="file-info" class="text-gray-600 italic"></div>
+            </div>
+
+            <!-- Demo Section -->
+            <div class="w-full md:w-1/2 bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-2xl font-semibold text-purple-800 mb-4">Behind the Scenes</h2>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <img src="/static/demo-face.jpg" alt="Demo Face" class="w-full sm:w-1/2 rounded-lg shadow-sm">
+                    <img src="/static/demo-emotions.png" alt="Demo Emotions" class="w-full sm:w-1/2 rounded-lg shadow-sm">
+                </div>
+            </div>
         </div>
 
-        <div id="source-code-note">
-            Source code is available <a href="https://github.com/lucakato/hume-face/" target="_blank">here</a>.
-        </div>
-
-        <div id="hume-api-note">
-            All of this is possible thanks to <a href='https://dev.hume.ai/docs/introduction' target="_blank">Hume's Batch API.</a>
-        </div>
-
-        <label for="image-input" class="custom-file-upload">
-            Choose File
-        </label>
-        <form action='/upload' method='post' enctype="multipart/form-data">
-            <input type="file" id="image-input" name="image" accept="image/*" onchange="displayFileName()">
-            <input type="submit" value="Upload Image" style="display: none;">
-        </form>
-        <div id="file-info"></div>
+        <footer class="mt-12 text-center text-gray-600">
+            <p>Source code is available <a href="https://github.com/lucakato/hume-face/" target="_blank" class="text-purple-600 hover:underline">here</a>.</p>
+            <p>All of this is possible thanks to <a href='https://dev.hume.ai/docs/introduction' target="_blank" class="text-purple-600 hover:underline">Hume's Batch API</a>.</p>
+        </footer>
     </div>
 
     <script>
@@ -81,7 +57,7 @@
 
             if (input.files.length > 0) {
                 const fileName = input.files[0].name;
-                fileInfo.textContent = 'Uploaded: ' + fileName;
+                fileInfo.textContent = 'Selected file: ' + fileName;
                 console.log('file selected:', fileName);
 
                 // trigger form submission
